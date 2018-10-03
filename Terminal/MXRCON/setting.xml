@@ -1,4 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<java version="1.8.0_181" class="java.beans.XMLDecoder">
- <object class="mxrcon.Code.SettingGeneral"/>
+<java version="10.0.2" class="java.beans.XMLDecoder">
+ <object class="mxrcon.Code.SettingGeneral">
+  <void property="enabledProvidersQuotes">
+   <object class="java.util.Vector">
+    <void method="add">
+     <object class="mxrcon.Code.SettingValueString">
+      <void property="key">
+       <string>MinecraftPE</string>
+      </void>
+      <void property="value">
+       <string>1</string>
+      </void>
+     </object>
+    </void>
+   </object>
+  </void>
+ </object>
 </java>

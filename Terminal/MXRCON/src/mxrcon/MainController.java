@@ -26,20 +26,54 @@ import mxrcon.Utilites.XmlWriter;
  */
 public class MainController implements Initializable
 {
+
     //Перевод интерфейса
     private ResourceBundle tr;
-    
+
     //Основные натройки приложения в которых определены плагины которые активны
     SettingGeneral setting = null;
 
+    //Сылка на окно список плагинов
+    PluginServersController PluginList = null;
+    
     //Сылка на окно добавить сервер
     AddServerController AddServer = null;
-    
+
     //Основной класс работы с приложением
     Worker w = null;
 
+    @FXML //Показать окно включения отключения плагинов для серверов
+    private void ActionPluginServers(ActionEvent event)
+    {
+        try
+        {
+            //Закроем если юзер потерял окно
+            if (PluginList != null)
+            {
+                PluginList.CloseWindows();
+            }
+            //Контроллер назначен в XML так как  возвращает NULL
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("PluginServers.fxml"), tr);
+            Scene scene = new Scene(fxmlLoader.load(), 600, 400);
+            Stage stage = new Stage();
+            stage.setScene(scene);
 
-    @FXML
+            //fxmlLoader.getController() НАДО ВЫЗЫВАТЬ ПОСЛЕ  fxmlLoader.load() ИНАЧЕ КОНТРОЛЛЕР ЕЩЕ НЕ СОЗДАН
+            PluginList = fxmlLoader.<PluginServersController>getController();
+            PluginList.SetWindowsProperties(stage);
+            PluginList.setSetting(setting);
+
+            //Теперь можно показать
+            stage.show();
+
+        } catch (Exception e)
+        {
+            LogApp("Failed to create new Window.");
+            //e.printStackTrace();
+        }
+    }
+
+    @FXML //Показать диалог подключения к возможным серверам
     private void ActionAddServer(ActionEvent event)
     {
          try
@@ -75,7 +109,7 @@ public class MainController implements Initializable
     {
         LogApp("MxRCON started...");
         tr = rb;
-        
+
         //Настройки приложения
         setting = XmlWriter.Load(SettingGeneral.class, DefineValues.PATH_FILE_SETTING);
 
@@ -84,10 +118,10 @@ public class MainController implements Initializable
             setting = new SettingGeneral();
             XmlWriter.Write(setting, DefineValues.PATH_FILE_SETTING);
         }
-        
+
         w = new Worker(setting);
     }
-    
+
     @FXML
     private void ActionExit(ActionEvent event)
     {

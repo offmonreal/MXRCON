@@ -1,8 +1,9 @@
-package MxModule;
+package MXModule;
+
 
 //Минимальные свойсва любого модуля
 
-public interface ModuleProperties
+public interface IModuleProperties
 {
 
     public String getName();
@@ -16,8 +17,6 @@ public interface ModuleProperties
     public boolean enabledSetting();
 
     public int getVersion();
-    
-    public void showSetting();
     
     public int getModuleApiVersion(); //Версия поддерживаемая приложением
 }

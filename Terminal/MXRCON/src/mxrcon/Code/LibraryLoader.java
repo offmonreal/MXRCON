@@ -1,33 +1,26 @@
 package mxrcon.Code;
 
-import MxModule.ModuleProperties;
 import java.io.File;
-import java.io.FileFilter;
-import java.io.IOException;
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
-import static java.rmi.server.RMIClassLoader.loadClass;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 import java.util.Arrays;
 import java.util.Iterator;
-import java.util.ServiceConfigurationError;
 import java.util.ServiceLoader;
-import javax.xml.datatype.DatatypeConfigurationException;
+import MXModule.IModuleProperties;
+import java.net.MalformedURLException;
+import java.util.Vector;
 
 public class LibraryLoader
 {
 
-    //Получить список плагинов ПРОВАЙДЕРА КОТИРОВОК имена файлов
-    public String[] getListProvidersQuotes()
+    //Получить список плагинов ВСЕХ и тусят они в одной куче
+    public String[] getListAllPlugins()
     {
         //Место храннения плагинов
-        File loc = new File(DefineValues.PATH_FOLDER_MODULES_GAMES);
+        File loc = new File(DefineValues.PATH_FOLDER_PLUGIN);
 
         //Фильтер по расширению
         File[] flist = loc.listFiles((File file) -> file.getPath().toLowerCase().endsWith(".jar"));
@@ -53,6 +46,57 @@ public class LibraryLoader
 
     }
 
+    //Получить список плагинов  имена файлов по категории
+    public String[] getPluginListsByCategory(String category_name)
+    {
+        try
+        {
+            //Место храннения плагинов
+            File loc = new File(DefineValues.PATH_FOLDER_PLUGIN);
+
+            //Фильтер по расширению
+            File[] flist = loc.listFiles((File file) -> file.getPath().toLowerCase().endsWith(".jar"));
+            
+            XXtest(flist);
+
+            if (flist != null && flist.length > 0)
+            {
+                //String[] all_items = new String[flist.length];
+
+                Vector<String> all_items = new Vector<String>();
+
+                for (int x = 0; x < flist.length; x++)
+                {
+                    URL[] urls = new URL[1];
+                    urls[0] = flist[x].toURI().toURL();
+                    URLClassLoader ucl = new URLClassLoader(urls);
+                    IModuleProperties m = findServiceProvider(IModuleProperties.class, ucl);
+
+                    if (m != null && m.getCategory().equals(category_name) && m.getModuleApiVersion() == DefineValues.MODULE_VERSION_SUPPORT)
+                    {
+                        all_items.add(flist[x].getName());
+                    }
+                }
+
+                return all_items.toArray(new String[all_items.size()]);
+
+            }
+        } catch (Exception e)
+        {
+            //Нет ничего
+            return new String[]
+            {
+                "ERROR"
+            };
+        }
+
+        //Нет ничего
+        return new String[]
+        {
+            "NONE"
+        };
+    }
+
     //Модуль из класса
     void XXtest(File[] flist)
     {
@@ -68,8 +112,9 @@ public class LibraryLoader
 
             URLClassLoader ucl = new URLClassLoader(urls);
 
-            ServiceLoader<ModuleProperties> sl = ServiceLoader.load(ModuleProperties.class, ucl);
-            Iterator<ModuleProperties> apit = sl.iterator();
+            ServiceLoader<IModuleProperties> sl = ServiceLoader.load(IModuleProperties.class, ucl);
+            Iterator<IModuleProperties> apit = sl.iterator();
+            
             while (apit.hasNext())
             {
                 System.out.println("XSTEP X " + apit.next().getName());
@@ -98,13 +143,13 @@ public class LibraryLoader
                 URL[] urls = new URL[1];
                 urls[0] = f.toURI().toURL();
                 URLClassLoader ucl = new URLClassLoader(urls);
-                ModuleProperties m = findServiceProvider(ModuleProperties.class, ucl);
+                IModuleProperties m = findServiceProvider(IModuleProperties.class, ucl);
 
-                if (m!= null && m.getCategory().equals(Category) && m.getName().equals(Name) && m.getVersion() == version && m.getModuleApiVersion() == DefineValues.MODULE_VERSION_SUPPORT)
+                if (m != null && m.getCategory().equals(Category) && m.getName().equals(Name) && m.getVersion() == version && m.getModuleApiVersion() == DefineValues.MODULE_VERSION_SUPPORT)
                     return ucl;
 
             }
-            
+
             return null;
 
         } catch (Exception e)
@@ -113,13 +158,13 @@ public class LibraryLoader
         }
     }
 
-    //Свойсва плагина по имени файла плагина ПРОВАЙДЕРА КОТИРОВОК
-    public ModuleProperties getPluginPropertiesProvidersQuotes(String name)
+    //Свойсва плагина по имени файла плагина
+    public IModuleProperties getPluginProperties(String name)
     {
         try
         {
             //Место храннения плагинов
-            File loc = new File(DefineValues.PATH_FOLDER_MODULES_PROVIDERS_QUOTES);
+            File loc = new File(DefineValues.PATH_FOLDER_PLUGIN);
 
             //Фильтер по расширению
             File[] flist = loc.listFiles((File file) -> file.getPath().toLowerCase().endsWith(".jar"));
@@ -132,7 +177,7 @@ public class LibraryLoader
                     URL[] urls = new URL[1];
                     urls[0] = f.toURI().toURL();
                     URLClassLoader ucl = new URLClassLoader(urls);
-                    return findServiceProvider(ModuleProperties.class, ucl);
+                    return findServiceProvider(IModuleProperties.class, ucl);
                 }
             }
 
@@ -177,7 +222,7 @@ public class LibraryLoader
         }
     }
 
-    //Загрузка .DLL или .SO
+    //Загрузка .DLL или .SO не используется
     public static boolean LoadLibrary()
     {
         String arhitecture = System.getProperty("os.arch");

@@ -2,6 +2,8 @@ package mxrcon.Utilites;
 
 import static java.lang.Math.floor;
 import java.text.DecimalFormat;
+import java.util.HashMap;
+import javafx.util.Pair;
 
 /**
  *
@@ -33,5 +35,19 @@ public class Inline
             return -1;
         }
     }
-}
 
+    public final static Pair<String, Integer> spilit(String source, String sperator)
+    {
+        if (source != null && !sperator.trim().isEmpty() && source.contains(sperator))
+        {
+            String[] tmp = source.split(sperator, 2);
+
+            if (tmp.length == 2 && Inline.toInt(tmp[1]) > 0)
+            {
+                return new Pair<>(tmp[0], Inline.toInt(tmp[1]));
+            }
+        }
+
+        return null;
+    }
+}

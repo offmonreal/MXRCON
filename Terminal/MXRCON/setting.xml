@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <java version="10.0.2" class="java.beans.XMLDecoder">
  <object class="mxrcon.Code.SettingGeneral">
-  <void property="enabledProvidersQuotes">
-   <object class="java.util.Vector">
+  <void property="enabledProvidersGameServer">
+   <object class="java.util.ArrayList">
     <void method="add">
      <object class="mxrcon.Code.SettingValueString">
       <void property="key">

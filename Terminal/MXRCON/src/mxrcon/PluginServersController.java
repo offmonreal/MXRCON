@@ -2,7 +2,6 @@ package mxrcon;
 
 import java.net.URL;
 import java.util.ResourceBundle;
-import java.util.Vector;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -21,6 +20,7 @@ import mxrcon.Utilites.ListViewHandler;
 import mxrcon.Utilites.XmlWriter;
 import MXModule.IModuleProperties;
 import MXModule.IServerProvider;
+import java.util.ArrayList;
 
 public class PluginServersController implements Initializable
 {
@@ -186,7 +186,7 @@ public class PluginServersController implements Initializable
     //Поиск ПЛАГИНА в настройках если ли он среди активных плагинов
     private boolean FindeEnabledPlugin(String PluginName, String PluginVersion)
     {
-        Vector<SettingValueString> all_mudules = setting.getEnabledProvidersQuotes();
+        ArrayList<SettingValueString> all_mudules = setting.getEnabledProvidersGameServer();
 
         if (all_mudules != null)
         {
@@ -209,10 +209,10 @@ public class PluginServersController implements Initializable
     //Добавить плагин в глобальные настройки и сохранить
     private void addPlugin(String PluginName, String PluginVersion)
     {
-        Vector<SettingValueString> all_mudules = setting.getEnabledProvidersQuotes();
+        ArrayList<SettingValueString> all_mudules = setting.getEnabledProvidersGameServer();
 
         if (all_mudules == null)
-            all_mudules = new Vector<SettingValueString>();
+            all_mudules = new ArrayList<SettingValueString>();
 
         for (SettingValueString v : all_mudules)
         {
@@ -226,14 +226,14 @@ public class PluginServersController implements Initializable
         v.setKey(PluginName);
         v.setValue(PluginVersion);
         all_mudules.add(v);
-        setting.setEnabledProvidersQuotes(all_mudules);
+        setting.setEnabledProvidersGameServer(all_mudules);
         setting_reload_message = true;
 
     }
 
     private void removePlugin(String PluginName, String PluginVersion)
     {
-        Vector<SettingValueString> all_mudules = setting.getEnabledProvidersQuotes();
+        ArrayList<SettingValueString> all_mudules = setting.getEnabledProvidersGameServer();
 
         if (all_mudules != null)
         {

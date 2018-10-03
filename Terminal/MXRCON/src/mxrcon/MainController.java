@@ -16,6 +16,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
 import mxrcon.Code.DefineValues;
+import mxrcon.Code.IMain;
 import mxrcon.Code.SettingGeneral;
 import mxrcon.Code.Worker;
 import mxrcon.Utilites.XmlWriter;
@@ -24,7 +25,7 @@ import mxrcon.Utilites.XmlWriter;
  *
  * @author maxim
  */
-public class MainController implements Initializable
+public class MainController implements Initializable, IMain
 {
 
     //Перевод интерфейса
@@ -35,7 +36,7 @@ public class MainController implements Initializable
 
     //Сылка на окно список плагинов
     PluginServersController PluginList = null;
-    
+
     //Сылка на окно добавить сервер
     AddServerController AddServer = null;
 
@@ -76,7 +77,7 @@ public class MainController implements Initializable
     @FXML //Показать диалог подключения к возможным серверам
     private void ActionAddServer(ActionEvent event)
     {
-         try
+        try
         {
             //Закроем если юзер потерял окно
             if (AddServer != null)
@@ -85,17 +86,18 @@ public class MainController implements Initializable
             }
             //Контроллер назначен в XML так как  возвращает NULL
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("AddServer.fxml"), tr);
-            Scene scene = new Scene(fxmlLoader.load(), 600, 400);
+            Scene scene = new Scene(fxmlLoader.load(), 600, 300);
             Stage stage = new Stage();
             stage.setScene(scene);
 
             //fxmlLoader.getController() НАДО ВЫЗЫВАТЬ ПОСЛЕ  fxmlLoader.load() ИНАЧЕ КОНТРОЛЛЕР ЕЩЕ НЕ СОЗДАН
             AddServer = fxmlLoader.<AddServerController>getController();
             AddServer.SetWindowsProperties(stage);
-            AddServer.setSetting(setting);
 
             //Теперь можно показать
             stage.show();
+
+            AddServer.setWorker(w);
 
         } catch (Exception e)
         {
@@ -119,7 +121,13 @@ public class MainController implements Initializable
             XmlWriter.Write(setting, DefineValues.PATH_FILE_SETTING);
         }
 
-        w = new Worker(setting);
+        w = new Worker(setting, this);
+    }
+
+    @Override
+    public void AddServer()
+    {
+
     }
 
     @FXML

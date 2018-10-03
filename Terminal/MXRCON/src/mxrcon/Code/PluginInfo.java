@@ -4,14 +4,26 @@ import java.io.Serializable;
 
 //Простой тип данных для хранения в настройках Ключ=Значение
 @SuppressWarnings("serial") //или в классе обьявить ИД  private static final long serialVersionUID = 546546546556
-public class SettingValueString implements Serializable
+public class PluginInfo implements Serializable
 {
+
     String key;
     String value;
+    String fileName;
 
-    public SettingValueString()
+    public PluginInfo()
     {
 
+    }
+
+    public String getFileName()
+    {
+        return fileName;
+    }
+
+    public void setFileName(String v)
+    {
+        this.fileName = v;
     }
 
     public String getValue()

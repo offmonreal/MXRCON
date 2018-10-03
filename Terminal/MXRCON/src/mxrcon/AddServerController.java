@@ -19,7 +19,7 @@ import javafx.stage.Window;
 import javafx.util.Pair;
 import mxrcon.Code.ISRV;
 import mxrcon.Code.SettingGeneral;
-import mxrcon.Code.SettingValueString;
+import mxrcon.Code.PluginInfo;
 import mxrcon.Code.Worker;
 import mxrcon.Utilites.Inline;
 import net.kronos.rkon.core.Rcon;
@@ -155,7 +155,7 @@ public class AddServerController implements Initializable
         w = value;
         setting = value.setting;
 
-        ArrayList<SettingValueString> all_mudules = setting.getEnabledProvidersGameServer();
+        ArrayList<PluginInfo> all_mudules = setting.getEnabledProvidersGameServer();
 
         if (all_mudules != null)
         {

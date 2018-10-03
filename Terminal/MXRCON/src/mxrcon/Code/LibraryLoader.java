@@ -157,7 +157,8 @@ public class LibraryLoader
             return null;
         }
     }
-
+    
+ 
     //Свойсва плагина по имени файла плагина
     public IModuleProperties getPluginProperties(String name)
     {

@@ -6,6 +6,8 @@ import mxrcon.Utilites.Inline;
 import MXModule.IModuleProperties;
 import MXModule.IServerProvider;
 import java.util.ArrayList;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
 import mxrcon.Utilites.XmlWriter;
 
 /**
@@ -17,8 +19,8 @@ public class Worker
 
     public SettingGeneral setting = null;
     public ServerList srv_all = null;
-
     private IMain root;
+    private TabPane tabs;
 
     //
     IModuleProperties mp_providers_quotes = null;
@@ -28,6 +30,7 @@ public class Worker
     {
         setting = set;
         root = root_class;
+        tabs = root.getTabPane();
 
         srv_all = XmlWriter.Load(ServerList.class, DefineValues.PATH_FILE_SERVERS);
 
@@ -35,6 +38,9 @@ public class Worker
         {
             srv_all = new ServerList();
             XmlWriter.Write(srv_all, DefineValues.PATH_FILE_SERVERS);
+        } else
+        {
+            LoadAllServer();
         }
     }
 
@@ -59,9 +65,38 @@ public class Worker
         return 1;
     }
 
+    private void LoadAllServer()
+    {
+       ArrayList<ISRV> elements = srv_all.getEnabledSRV();
+       
+       for(ISRV e : elements)
+       {
+           addServerToGui(e);
+       }
+    }
+
     private void addServerToGui(ISRV srv)
     {
-        root.AddServer();
+        LibraryLoader ll = new LibraryLoader();
+       //Список активных провайдеров
+        ArrayList<PluginInfo> all_enable_provider = setting.getEnabledProvidersGameServer();
+
+        
+        if(all_enable_provider != null)
+        {
+            return;
+        }
+        
+        
+        
+        
+        
+        
+        Tab t = new Tab();
+        t.setText(srv.Provider + "-" + srv.Host + ":" + srv.Port);
+        tabs.getTabs().add(t);
+        
+        
     }
 
     //Загрузка модулей
@@ -69,11 +104,11 @@ public class Worker
     {
         LibraryLoader ll = new LibraryLoader();
         //Список активных провайдеров
-        ArrayList<SettingValueString> modul_p_q = setting.getEnabledProvidersGameServer();
+        ArrayList<PluginInfo> modul = setting.getEnabledProvidersGameServer();
 
-        if (modul_p_q != null)
+        if (modul != null)
         {
-            for (SettingValueString v : modul_p_q)
+            for (PluginInfo v : modul)
             {
                 URLClassLoader uc = ll.getModuleFile(DefineValues.PATH_FOLDER_PLUGIN, "game_provider", v.key, Inline.toInt(v.value));
 

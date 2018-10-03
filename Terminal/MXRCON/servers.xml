@@ -1,26 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <java version="10.0.2" class="java.beans.XMLDecoder">
- <object class="mxrcon.Code.ServerList" id="ServerList0">
-  <void property="enabledSRV">
-   <void method="add">
-    <object class="mxrcon.Code.ISRV">
-     <void property="host">
-      <string>80.211.134.67</string>
-     </void>
-     <void property="password">
-      <string>Lcft0Z33d7</string>
-     </void>
-     <void property="port">
-      <int>25575</int>
-     </void>
-     <void property="provider">
-      <string>MinecraftPE</string>
-     </void>
-     <void property="versionProvider">
-      <int>1</int>
-     </void>
-    </object>
-   </void>
-  </void>
- </object>
+ <object class="mxrcon.Code.ServerList"/>
 </java>

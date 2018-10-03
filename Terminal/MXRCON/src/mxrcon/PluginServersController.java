@@ -15,7 +15,7 @@ import javafx.stage.Window;
 import mxrcon.Code.DefineValues;
 import mxrcon.Code.LibraryLoader;
 import mxrcon.Code.SettingGeneral;
-import mxrcon.Code.SettingValueString;
+import mxrcon.Code.PluginInfo;
 import mxrcon.Utilites.ListViewHandler;
 import mxrcon.Utilites.XmlWriter;
 import MXModule.IModuleProperties;
@@ -100,8 +100,7 @@ public class PluginServersController implements Initializable
                         {
                             B_Setting.setDisable(true);
                         }
-
-                        if (FindeEnabledPlugin(properties_plugin.getName(), Integer.toString(properties_plugin.getVersion())))
+                        if (FindeEnabledPlugin(properties_plugin.getName(), Integer.toString(properties_plugin.getVersion()),listPlugin.getSelectionModel().getSelectedItems().get(0).toString()))
                         {
                             TB_EnablePlugin.setSelected(true);
 
@@ -165,7 +164,7 @@ public class PluginServersController implements Initializable
 
                 if (event != null)
                 {
-                    addPlugin(properties_plugin.getName(), Integer.toString(properties_plugin.getVersion()));
+                    addPlugin(properties_plugin.getName(), Integer.toString(properties_plugin.getVersion()),listPlugin.getSelectionModel().getSelectedItems().get(0).toString());
                 }
 
             } else
@@ -173,7 +172,7 @@ public class PluginServersController implements Initializable
                 TB_EnablePlugin.setText(tr.getString("OFF"));
                 if (event != null)
                 {
-                    removePlugin(properties_plugin.getName(), Integer.toString(properties_plugin.getVersion()));
+                    removePlugin(properties_plugin.getName(), Integer.toString(properties_plugin.getVersion()),listPlugin.getSelectionModel().getSelectedItems().get(0).toString());
                 }
             }
 
@@ -184,15 +183,15 @@ public class PluginServersController implements Initializable
     }
 
     //Поиск ПЛАГИНА в настройках если ли он среди активных плагинов
-    private boolean FindeEnabledPlugin(String PluginName, String PluginVersion)
+    private boolean FindeEnabledPlugin(String PluginName, String PluginVersion, String FileName)
     {
-        ArrayList<SettingValueString> all_mudules = setting.getEnabledProvidersGameServer();
+        ArrayList<PluginInfo> all_mudules = setting.getEnabledProvidersGameServer();
 
         if (all_mudules != null)
         {
-            for (SettingValueString v : all_mudules)
+            for (PluginInfo v : all_mudules)
             {
-                if (v.getKey().equals(PluginName) && v.getValue().equals(PluginVersion))
+                if (v.getKey().equals(PluginName) && v.getValue().equals(PluginVersion) && v.getFileName().equals(FileName))
                 {
                     return true;
                 }
@@ -207,39 +206,40 @@ public class PluginServersController implements Initializable
     }
 
     //Добавить плагин в глобальные настройки и сохранить
-    private void addPlugin(String PluginName, String PluginVersion)
+    private void addPlugin(String PluginName, String PluginVersion, String FileName)
     {
-        ArrayList<SettingValueString> all_mudules = setting.getEnabledProvidersGameServer();
+        ArrayList<PluginInfo> all_mudules = setting.getEnabledProvidersGameServer();
 
         if (all_mudules == null)
-            all_mudules = new ArrayList<SettingValueString>();
+            all_mudules = new ArrayList<PluginInfo>();
 
-        for (SettingValueString v : all_mudules)
+        for (PluginInfo v : all_mudules)
         {
-            if (v.getKey().equals(PluginName) && v.getValue().equals(PluginVersion))
+            if (v.getKey().equals(PluginName) && v.getValue().equals(PluginVersion)&& v.getValue().equals(FileName))
             {
                 return;
             }
         }
 
-        SettingValueString v = new SettingValueString();
+        PluginInfo v = new PluginInfo();
         v.setKey(PluginName);
         v.setValue(PluginVersion);
+        v.setFileName(FileName);
         all_mudules.add(v);
         setting.setEnabledProvidersGameServer(all_mudules);
         setting_reload_message = true;
 
     }
 
-    private void removePlugin(String PluginName, String PluginVersion)
+    private void removePlugin(String PluginName, String PluginVersion, String FileName)
     {
-        ArrayList<SettingValueString> all_mudules = setting.getEnabledProvidersGameServer();
+        ArrayList<PluginInfo> all_mudules = setting.getEnabledProvidersGameServer();
 
         if (all_mudules != null)
         {
-            for (SettingValueString v : all_mudules)
+            for (PluginInfo v : all_mudules)
             {
-                if (v.getKey().equals(PluginName) && v.getValue().equals(PluginVersion))
+                if (v.getKey().equals(PluginName) && v.getValue().equals(PluginVersion)&& v.getFileName().equals(FileName))
                 {
                     all_mudules.remove(v);
                     setting_reload_message = true;

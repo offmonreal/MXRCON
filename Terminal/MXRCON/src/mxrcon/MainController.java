@@ -14,6 +14,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.control.TabPane;
 import javafx.stage.Stage;
 import mxrcon.Code.DefineValues;
 import mxrcon.Code.IMain;
@@ -42,6 +43,9 @@ public class MainController implements Initializable, IMain
 
     //Основной класс работы с приложением
     Worker w = null;
+    
+    @FXML
+    TabPane Tabs;
 
     @FXML //Показать окно включения отключения плагинов для серверов
     private void ActionPluginServers(ActionEvent event)
@@ -125,9 +129,9 @@ public class MainController implements Initializable, IMain
     }
 
     @Override
-    public void AddServer()
+    public TabPane getTabPane()
     {
-
+        return Tabs;
     }
 
     @FXML

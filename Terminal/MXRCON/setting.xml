@@ -4,7 +4,10 @@
   <void property="enabledProvidersGameServer">
    <object class="java.util.ArrayList">
     <void method="add">
-     <object class="mxrcon.Code.SettingValueString">
+     <object class="mxrcon.Code.PluginInfo">
+      <void property="fileName">
+       <string>MinecraftPE.jar</string>
+      </void>
       <void property="key">
        <string>MinecraftPE</string>
       </void>

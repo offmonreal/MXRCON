@@ -8,7 +8,7 @@ import java.util.ArrayList;
 public class SettingGeneral implements Serializable
 {
 
-    private ArrayList<SettingValueString> enabled_providers_gs;
+    private ArrayList<PluginInfo> enabled_providers_gs;
 
     public SettingGeneral()
     {
@@ -16,13 +16,13 @@ public class SettingGeneral implements Serializable
     }
 
     //Список провайдеров которые включены
-    public void setEnabledProvidersGameServer(ArrayList<SettingValueString> value)
+    public void setEnabledProvidersGameServer(ArrayList<PluginInfo> value)
     {
         enabled_providers_gs = value;
     }
 
     //Список провайдеров которые включены
-    public ArrayList<SettingValueString> getEnabledProvidersGameServer()
+    public ArrayList<PluginInfo> getEnabledProvidersGameServer()
     {
         return enabled_providers_gs;
     }
